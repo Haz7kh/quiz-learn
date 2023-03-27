@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "579158177675",
+    "project_id": "quiz-learn-2935c",
+    "storage_bucket": "quiz-learn-2935c.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:579158177675:android:e463160d804153d60ba18e",
+        "android_client_info": {
+          "package_name": "com.haz7.quizlearn"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "579158177675-b1t2ipk5p5o60cf9h57c41japa712c5u.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.haz7.quizlearn",
+            "certificate_hash": "c56f1537b98e1c774c0299aeef09f48740a6125f"
+          }
+        },
+        {
+          "client_id": "579158177675-20d3n1n6q4m0bnm390huqto25ick097v.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDKUjiUVdyuWeFpX9UHSxrVjeWd1DlHNZE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "579158177675-20d3n1n6q4m0bnm390huqto25ick097v.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

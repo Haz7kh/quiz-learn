@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Quiz Learn</string>
+    <string name="account">Don\'t you have an account yet? <font color="#5b39c6"><b><u><i>Sign Up</i></u></b></font> </string>
+    <string name="forgot_password"><u>I forgot my password</u> </string>
+    <string name="home">Home </string>
+    <string name="settings">Settings</string>
+    <string name="logout">Logout</string>
+    <string name="email">Email</string>
+    <string name="reset_my_password">Reset my password</string>
+    <string name="password">Password</string>
+    <string name="sign_in">sign in</string>
+    <string name="or">OR</string>
+    <string name="start">Start</string>
+    <string name="sign_up">sign up</string>
+</resources>
+
+    <!--    <string name="app_name">مسابقة تعلم</string>-->
+    <!--    <string name="account">ليس لديك حساب بعد؟<font color="#5b39c6"><b><u><i>اشتراك هنا</i></u></b></font> </string>-->
+    <!--    <string name="forgot_password"><u>لقد نسيت كلمة المرور</u> </string>-->
+    <!--    <string name="home"> الرئيسية</string>-->
+    <!--    <string name="settings">الضبط</string>-->
+    <!--    <string name="logout">تسجيل خروج</string>-->
+    <!--    <string name="email">بريد إلكتروني</string>-->
+    <!--    <string name="reset_my_password">إعادة تعيين كلمة المرور الخاصة بي</string>-->
+    <!--    <string name="password">كلمة المرور</string>-->
+    <!--    <string name="sign_in">تسجيل دخول</string>-->
+    <!--    <string name="or">أو</string>-->
+    <!--    <string name="start">ابدا</string>-->
+    <!--    <string name="sign_up">اشتراك</string>-->
