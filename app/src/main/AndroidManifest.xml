@@ -22,7 +22,8 @@
             android:theme="@style/SignupThem"/>
         <activity
             android:name=".QuizActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:theme="@style/SignupThem" />
         <activity
             android:name=".ForgotPasswordActivity"
             android:exported="false"
