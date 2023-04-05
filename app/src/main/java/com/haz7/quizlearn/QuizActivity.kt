@@ -3,6 +3,7 @@ package com.haz7.quizlearn
 import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.CountDownTimer
 import android.view.View
 import android.widget.Toast
 import com.google.firebase.database.DataSnapshot
@@ -31,6 +32,11 @@ class QuizActivity : AppCompatActivity() {
     var userCorrect  = 0
     var userWrong = 0
 
+    lateinit var timer : CountDownTimer
+    private  val totalTime = 25000L
+    var timerContinue = false
+    var leftTime = totalTime
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         quizBinding = ActivityQuizBinding.inflate(layoutInflater)
@@ -40,7 +46,10 @@ class QuizActivity : AppCompatActivity() {
         gameLogic()
 
         quizBinding.buttonNext.setOnClickListener{
-          gameLogic()
+
+            resetTimer()
+            gameLogic()
+
 
         }
 
@@ -49,6 +58,7 @@ class QuizActivity : AppCompatActivity() {
         }
 
         quizBinding.textViewA.setOnClickListener{
+            pauseTimer()
            userAnswer = "a"
             if (correctAnswer == userAnswer){
                 quizBinding.textViewA.setBackgroundColor(Color.GREEN)
@@ -64,6 +74,7 @@ class QuizActivity : AppCompatActivity() {
             disableClickableOptions()
         }
         quizBinding.textViewB.setOnClickListener{
+            pauseTimer()
             userAnswer = "b"
             if (correctAnswer == userAnswer){
                 quizBinding.textViewB.setBackgroundColor(Color.GREEN)
@@ -79,6 +90,7 @@ class QuizActivity : AppCompatActivity() {
             disableClickableOptions()
         }
         quizBinding.textViewC.setOnClickListener{
+            pauseTimer()
             userAnswer = "c"
             if (correctAnswer == userAnswer){
                 quizBinding.textViewC.setBackgroundColor(Color.GREEN)
@@ -94,6 +106,7 @@ class QuizActivity : AppCompatActivity() {
             disableClickableOptions()
         }
         quizBinding.textViewD.setOnClickListener{
+           pauseTimer()
             userAnswer="d"
             if (correctAnswer == userAnswer){
                 quizBinding.textViewD.setBackgroundColor(Color.GREEN)
@@ -137,6 +150,8 @@ class QuizActivity : AppCompatActivity() {
                     quizBinding.linearLayoutInfo.visibility = View.VISIBLE
                     quizBinding.linearLayoutQuestion.visibility = View.VISIBLE
                     quizBinding.linearLayoutBtns.visibility = View.VISIBLE
+
+                    startTimer()
                 } else {
                     Toast.makeText(applicationContext,"Your answered all the questions",Toast.LENGTH_SHORT).show()
                 }
@@ -175,5 +190,39 @@ class QuizActivity : AppCompatActivity() {
         quizBinding.textViewB.isClickable = true
         quizBinding.textViewC.isClickable = true
         quizBinding.textViewD.isClickable = true
+    }
+
+  private fun startTimer () {
+        timer = object: CountDownTimer(leftTime,1000){
+            override fun onTick(millisUntilFinish: Long) {
+                leftTime = millisUntilFinish
+                updateCountDownText()
+            }
+
+            override fun onFinish() {
+                disableClickableOptions()
+                resetTimer()
+                updateCountDownText()
+                quizBinding.textViewQuestion.text = "Sorry, Time is up! continue with next question."
+                timerContinue = false
+            }
+
+        }.start()
+      timerContinue= true
+    }
+
+    fun updateCountDownText(){
+      val remainingTime:Int = (leftTime/1000).toInt()
+        quizBinding.textViewTime.text= remainingTime.toString()
+    }
+    fun pauseTimer() {
+        timer.cancel()
+        timerContinue = false
+    }
+
+    fun resetTimer(){
+      pauseTimer()
+        leftTime = totalTime
+        updateCountDownText()
     }
 }
