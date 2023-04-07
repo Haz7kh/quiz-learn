@@ -16,10 +16,13 @@
         android:theme="@style/Theme.QuizLearn"
         tools:targetApi="31">
         <activity
+            android:name=".ResultActivity"
+            android:exported="false" />
+        <activity
             android:name=".SettingsActivity"
-            android:parentActivityName=".MainActivity"
             android:exported="false"
-            android:theme="@style/SignupThem"/>
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/SignupThem" />
         <activity
             android:name=".QuizActivity"
             android:exported="false"

@@ -1,11 +1,14 @@
 package com.haz7.quizlearn
 
+import android.content.Intent
 import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.CountDownTimer
 import android.view.View
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
@@ -37,6 +40,10 @@ class QuizActivity : AppCompatActivity() {
     var timerContinue = false
     var leftTime = totalTime
 
+    val auth = FirebaseAuth.getInstance()
+    val user = auth.currentUser
+    val scoreRef = database.reference
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         quizBinding = ActivityQuizBinding.inflate(layoutInflater)
@@ -54,7 +61,7 @@ class QuizActivity : AppCompatActivity() {
         }
 
         quizBinding.buttonFinish.setOnClickListener {
-
+            sendScore ()
         }
 
         quizBinding.textViewA.setOnClickListener{
@@ -153,7 +160,20 @@ class QuizActivity : AppCompatActivity() {
 
                     startTimer()
                 } else {
-                    Toast.makeText(applicationContext,"Your answered all the questions",Toast.LENGTH_SHORT).show()
+                   val dialogMessage = AlertDialog.Builder(this@QuizActivity)
+                    dialogMessage.setTitle("Quiz & Learn")
+                    dialogMessage.setMessage("Good Job!\nYou have answered all the questions.Do you want to see the result?")
+                    dialogMessage.setCancelable(false)
+                    dialogMessage.setPositiveButton("See Result"){ dialogWindow,postion ->
+                        sendScore()
+                    }
+                    dialogMessage.setNegativeButton("Play Again"){dialogWindow, postion ->
+                        val intent = Intent(this@QuizActivity, MainActivity::class.java)
+                        startActivity(intent)
+                        finish()
+                    }
+
+                    dialogMessage.create().show()
                 }
                 questionNumber++
 
@@ -224,5 +244,20 @@ class QuizActivity : AppCompatActivity() {
       pauseTimer()
         leftTime = totalTime
         updateCountDownText()
+    }
+
+    fun sendScore() {
+        user?.let{
+            val userUID = it.uid
+            scoreRef.child("scores").child(userUID).child("correct").setValue(userCorrect)
+            scoreRef.child("scores").child(userUID).child("wrong").setValue(userWrong).addOnSuccessListener {
+
+                Toast.makeText(applicationContext,"Scores sent to database successfully",Toast.LENGTH_SHORT).show()
+                val intent = Intent(this@QuizActivity, ResultActivity::class.java)
+                startActivity(intent)
+                finish()
+            }
+        }
+
     }
 }
