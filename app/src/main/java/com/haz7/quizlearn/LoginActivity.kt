@@ -69,19 +69,22 @@ class LoginActivity : AppCompatActivity() {
     }
 
     fun signInUser(userEmail: String, userPassword:String) {
-
-     auth.signInWithEmailAndPassword(userEmail,userPassword).addOnCompleteListener { task ->
-         if(task.isSuccessful){
-            Toast.makeText(applicationContext,"Welcome to Quiz&Learn App ",Toast.LENGTH_SHORT).show()
-             val intent = Intent(this@LoginActivity, MainActivity::class.java)
-             startActivity(intent)
-             finish()
-         }else {
-             Toast.makeText(applicationContext,task.exception?.localizedMessage,Toast.LENGTH_SHORT).show()
-         }
-
-     }
+        if (userEmail.isNotEmpty() && userPassword.isNotEmpty()) {
+            auth.signInWithEmailAndPassword(userEmail,userPassword).addOnCompleteListener { task ->
+                if(task.isSuccessful){
+                    Toast.makeText(applicationContext,"Welcome to Quiz&Learn App ",Toast.LENGTH_SHORT).show()
+                    val intent = Intent(this@LoginActivity, MainActivity::class.java)
+                    startActivity(intent)
+                    finish()
+                }else {
+                    Toast.makeText(applicationContext,task.exception?.localizedMessage,Toast.LENGTH_SHORT).show()
+                }
+            }
+        } else {
+            Toast.makeText(applicationContext,"Please enter a valid email and password",Toast.LENGTH_SHORT).show()
+        }
     }
+
 
     override fun onStart() {
         super.onStart()
