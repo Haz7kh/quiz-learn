@@ -5,7 +5,9 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import android.widget.Toast
+import com.airbnb.lottie.LottieDrawable
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.firebase.auth.FirebaseAuth
@@ -27,6 +29,20 @@ class MainActivity : AppCompatActivity() {
             val intent = Intent(this,QuizActivity::class.java)
             startActivity(intent)
         }
+
+
+        val animationView = mainBinding.animationView
+        animationView.addOnAttachStateChangeListener(object : View.OnAttachStateChangeListener {
+            override fun onViewAttachedToWindow(v: View) {
+                animationView.setAnimation(R.raw.home)
+                animationView.repeatCount = LottieDrawable.INFINITE
+                animationView.playAnimation()
+            }
+
+            override fun onViewDetachedFromWindow(v: View) {
+                animationView.cancelAnimation()
+            }
+        })
 
 
 
