@@ -5,6 +5,7 @@ import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.CountDownTimer
+import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
@@ -14,6 +15,7 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.haz7.quizlearn.databinding.ActivityQuizBinding
+import kotlin.random.Random
 
 class QuizActivity : AppCompatActivity() {
 
@@ -29,7 +31,7 @@ class QuizActivity : AppCompatActivity() {
     var answerD = ""
     var correctAnswer = ""
     var questionCount = 0
-    var questionNumber = 1
+    var questionNumber = 0
 
     var userAnswer = ""
     var userCorrect  = 0
@@ -44,11 +46,21 @@ class QuizActivity : AppCompatActivity() {
     val user = auth.currentUser
     val scoreRef = database.reference
 
+    val questions = HashSet<Int>()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         quizBinding = ActivityQuizBinding.inflate(layoutInflater)
         val view = quizBinding.root
         setContentView(view)
+
+        do {
+           val number =  Random.nextInt(1,11)
+            Log.d("number",number.toString())
+            questions.add(number)
+        } while (questions.size < 5)
+
+        Log.d("numberOfQuestions", questions.toString())
 
         gameLogic()
 
@@ -139,13 +151,13 @@ class QuizActivity : AppCompatActivity() {
             override fun onDataChange(snapshot: DataSnapshot) {
 
                 questionCount = snapshot.childrenCount.toInt()
-                if(questionNumber <= questionCount){
-                    question = snapshot.child(questionNumber.toString()).child("q").value.toString()
-                    answerA = snapshot.child(questionNumber.toString()).child("a").value.toString()
-                    answerB = snapshot.child(questionNumber.toString()).child("b").value.toString()
-                    answerC = snapshot.child(questionNumber.toString()).child("c").value.toString()
-                    answerD = snapshot.child(questionNumber.toString()).child("d").value.toString()
-                    correctAnswer = snapshot.child(questionNumber.toString()).child("answer").value.toString()
+                if(questionNumber < questions.size){
+                    question = snapshot.child(questions.elementAt(questionNumber).toString()).child("q").value.toString()
+                    answerA = snapshot.child(questions.elementAt(questionNumber).toString()).child("a").value.toString()
+                    answerB = snapshot.child(questions.elementAt(questionNumber).toString()).child("b").value.toString()
+                    answerC = snapshot.child(questions.elementAt(questionNumber).toString()).child("c").value.toString()
+                    answerD = snapshot.child(questions.elementAt(questionNumber).toString()).child("d").value.toString()
+                    correctAnswer = snapshot.child(questions.elementAt(questionNumber).toString()).child("answer").value.toString()
 
                     quizBinding.textViewQuestion.text = question
                     quizBinding.textViewA.text = answerA
@@ -160,20 +172,25 @@ class QuizActivity : AppCompatActivity() {
 
                     startTimer()
                 } else {
-                   val dialogMessage = AlertDialog.Builder(this@QuizActivity)
-                    dialogMessage.setTitle("Quiz & Learn")
-                    dialogMessage.setMessage("Good Job!\nYou have answered all the questions.Do you want to see the result?")
-                    dialogMessage.setCancelable(false)
-                    dialogMessage.setPositiveButton("See Result"){ dialogWindow,postion ->
-                        sendScore()
-                    }
-                    dialogMessage.setNegativeButton("Play Again"){dialogWindow, postion ->
-                        val intent = Intent(this@QuizActivity, MainActivity::class.java)
-                        startActivity(intent)
-                        finish()
-                    }
+                    val dialogMessage = AlertDialog.Builder(this@QuizActivity)
+                        .setTitle("Quiz & Learn")
+                        .setMessage("Good Job!\nYou have answered all the questions. Do you want to see the result?")
+                        .setCancelable(false)
+                        .setPositiveButton("See Result") { dialog, which ->
+                            // This code will execute when the "See Result" button is clicked
+                            sendScore()
+                        }
+                        .setNegativeButton("Play Again") { dialog, which ->
+                            // This code will execute when the "Play Again" button is clicked
+                            val intent = Intent(this@QuizActivity, MainActivity::class.java)
+                            startActivity(intent)
+                            finish()
+                        }
+                        .create()
 
-                    dialogMessage.create().show()
+// Show the dialog
+                    dialogMessage.show()
+
                 }
                 questionNumber++
 
